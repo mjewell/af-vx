@@ -7,13 +7,27 @@ import ReactDOM from 'react-dom';
 import LineGraph from './Graphs/LineGraph';
 import registerServiceWorker from './registerServiceWorker';
 
-const data = [
-  { date: new Date('2017-01-01'), value: 10 },
-  { date: new Date('2017-02-01'), value: 20 },
-  { date: new Date('2017-03-01'), value: 30 },
-  { date: new Date('2017-04-01'), value: 20 },
-  { date: new Date('2017-05-01'), value: 40 }
-];
+const data = {
+  Test_1: {
+    data: [
+      { date: new Date('2017-01-01'), value: 10 },
+      { date: new Date('2017-02-01'), value: 20 },
+      { date: new Date('2017-03-01'), value: 30 },
+      { date: new Date('2017-05-01'), value: 40 }
+    ],
+    color: '#2DA5DC'
+  },
+  Test_2: {
+    data: [
+      { date: new Date('2017-01-01'), value: 90 },
+      { date: new Date('2017-02-01'), value: 50 },
+      { date: new Date('2017-03-01'), value: 30 },
+      { date: new Date('2017-04-01'), value: 80 },
+      { date: new Date('2017-05-01'), value: 10 }
+    ],
+    color: '#C61A0C'
+  }
+};
 
 const margin = {
   left: 90,

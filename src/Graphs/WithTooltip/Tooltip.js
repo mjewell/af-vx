@@ -33,7 +33,6 @@ export default class Tooltip extends Component {
           width={xMax}
           height={yMax}
           fill="transparent"
-          data={data}
           onMouseLeave={() => hideTooltip}
           onMouseMove={() => (event: any) => {
             const { x } = localPoint(svg, event);

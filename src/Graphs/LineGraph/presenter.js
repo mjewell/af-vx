@@ -1,7 +1,5 @@
-import { AxisBottom, AxisLeft } from '@vx/axis';
-import { curveMonotoneX } from '@vx/curve';
+import { curveLinear } from '@vx/curve';
 import { GlyphDot } from '@vx/glyph';
-import { GridColumns, GridRows } from '@vx/grid';
 import { Group } from '@vx/group';
 import { scaleLinear, scaleTime } from '@vx/scale';
 import { LinePath } from '@vx/shape';
@@ -9,9 +7,38 @@ import { extent } from 'd3-array';
 import React, { Component } from 'react';
 
 import Tooltip from '../WithTooltip/Tooltip';
+import GraphArea from './GraphArea';
 
 export default class LineGraph extends Component {
   state = { dummy: false };
+
+  renderLines = ({ xScale, yScale }) => {
+    const { data: dataset, xAccessor, yAccessor } = this.props;
+    return Object.values(dataset).map(({ data, color }) => (
+      <LinePath
+        data={data}
+        xScale={xScale}
+        yScale={yScale}
+        x={xAccessor}
+        y={yAccessor}
+        strokeWidth={2}
+        stroke={color}
+        curve={curveLinear}
+        glyph={(d, i) => {
+          return (
+            <g key={`line-point-${i}`}>
+              <GlyphDot
+                cx={xScale(xAccessor(d))}
+                cy={yScale(yAccessor(d))}
+                r={5}
+                fill={color}
+              />
+            </g>
+          );
+        }}
+      />
+    ));
+  };
 
   render() {
     const {
@@ -21,10 +48,6 @@ export default class LineGraph extends Component {
       margin,
       xDomain,
       yDomain,
-      xAxisLabel,
-      yAxisLabel,
-      xAxisFormat,
-      yAxisFormat,
       xAccessor,
       yAccessor
     } = this.props;
@@ -32,13 +55,18 @@ export default class LineGraph extends Component {
     const xMax = width - margin.left - margin.right;
     const yMax = height - margin.top - margin.bottom;
 
+    const allData = Object.values(data).reduce((arr, curr) => [
+      ...arr,
+      ...curr.data
+    ]);
+
     const xScale = scaleTime({
       range: [0, xMax],
-      domain: xDomain || extent(data, xAccessor)
+      domain: xDomain || extent(allData, xAccessor)
     });
     const yScale = scaleLinear({
       range: [yMax, 0],
-      domain: yDomain || extent(data, yAccessor)
+      domain: yDomain || extent(allData, yAccessor)
     });
 
     return (
@@ -53,61 +81,19 @@ export default class LineGraph extends Component {
         height={height}
         fill="#F6F6F6"
       >
-        <rect width={width} height={height} fill="#F6F6F6" />
-        <GridRows
-          scale={yScale}
-          left={margin.left}
-          top={margin.top}
-          width={xMax}
-          stroke="#e9e9e9"
-        />
-        <GridColumns
-          scale={xScale}
-          left={margin.left}
-          top={margin.top}
-          height={yMax}
-          stroke="#e9e9e9"
+        <GraphArea
+          {...this.props}
+          xMax={xMax}
+          yMax={yMax}
+          xScale={xScale}
+          yScale={yScale}
         />
         <Group top={margin.top} left={margin.left}>
-          <LinePath
-            data={data}
-            xScale={xScale}
-            yScale={yScale}
-            x={xAccessor}
-            y={yAccessor}
-            strokeWidth={2}
-            stroke="#000"
-            curve={curveMonotoneX}
-            glyph={(d, i) => {
-              return (
-                <g key={`line-point-${i}`}>
-                  <GlyphDot
-                    cx={xScale(xAccessor(d))}
-                    cy={yScale(yAccessor(d))}
-                    r={5}
-                    fill="#000"
-                  />
-                </g>
-              );
-            }}
-          />
+          {this.renderLines({ xScale, yScale })}
         </Group>
-        <AxisLeft
-          top={margin.top}
-          left={margin.left}
-          scale={yScale}
-          label={yAxisLabel}
-          tickFormat={yAxisFormat}
-        />
-        <AxisBottom
-          top={height - margin.bottom}
-          left={margin.left}
-          scale={xScale}
-          label={xAxisLabel}
-          tickFormat={xAxisFormat}
-        />
         <Tooltip
           {...this.props}
+          data={data.Test_1.data}
           xMax={xMax}
           yMax={yMax}
           xScale={xScale}
