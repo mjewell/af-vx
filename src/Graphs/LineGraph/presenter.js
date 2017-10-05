@@ -1,4 +1,3 @@
-import { Group } from '@vx/group';
 import { scaleLinear, scaleTime } from '@vx/scale';
 import { extent } from 'd3-array';
 import React, { Component } from 'react';
@@ -53,8 +52,7 @@ export default class LineGraph extends Component {
             yMax={yMax}
             xScale={xScale}
             yScale={yScale}
-          />
-          <Group top={margin.top} left={margin.left}>
+          >
             <Lines
               data={data}
               xScale={xScale}
@@ -71,13 +69,11 @@ export default class LineGraph extends Component {
               yAccessor={yAccessor}
             />
             <MouseTracker
-              x={0}
-              y={0}
               width={xMax}
               height={yMax}
               onMouseMove={this.setCoords}
             />
-          </Group>
+          </GraphArea>
         </svg>
       </div>
     );

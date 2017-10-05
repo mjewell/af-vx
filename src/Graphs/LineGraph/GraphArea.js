@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 export default class GraphArea extends Component {
   render() {
     const {
+      children,
       width,
       height,
       margin,
@@ -50,6 +51,9 @@ export default class GraphArea extends Component {
           label={xAxisLabel}
           tickFormat={xAxisFormat}
         />
+        <Group top={margin.top} left={margin.left}>
+          {children}
+        </Group>
       </Group>
     );
   }
