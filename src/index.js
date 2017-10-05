@@ -69,14 +69,6 @@ ReactDOM.render(
     yAxisFormat={value => `$${value}`}
     xAccessor={xAccessor}
     yAccessor={yAccessor}
-    tooltipContent={tooltipData => (
-      <div>
-        <div style={{ fontWeight: 700 }}>
-          {moment(xAccessor(tooltipData)).format('MMM YYYY')}
-        </div>
-        {`$${yAccessor(tooltipData)}`}
-      </div>
-    )}
   />,
   document.getElementById('root')
 );
