@@ -58,7 +58,7 @@ const yAccessor = d => d.value;
 ReactDOM.render(
   <LineGraph
     data={data}
-    width={1750}
+    width={1500}
     height={500}
     margin={margin}
     yDomain={[0, 100]}

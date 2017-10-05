@@ -1,8 +1,7 @@
 import { compose } from 'recompose';
 
-import WithTooltip from '../WithTooltip/hoc';
 import Presenter from './presenter';
 
-const container = compose(WithTooltip);
+const container = compose();
 
 export default container(Presenter);
