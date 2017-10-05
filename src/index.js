@@ -1,5 +1,6 @@
 import './index.css';
 
+import { random, range } from 'lodash';
 import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -7,25 +8,40 @@ import ReactDOM from 'react-dom';
 import LineGraph from './Graphs/LineGraph';
 import registerServiceWorker from './registerServiceWorker';
 
+let prev = random(0, 100);
+
+const generateRandom = (low, high, range) => {
+  prev = Math.max(Math.min(high, prev + random(-range, range)), low);
+  return prev;
+};
+
 const data = {
   Test_1: {
-    data: [
-      { date: new Date('2017-01-01'), value: 10 },
-      { date: new Date('2017-02-01'), value: 20 },
-      { date: new Date('2017-03-01'), value: 30 },
-      { date: new Date('2017-05-01'), value: 40 }
-    ],
+    data: range(100).map(d => ({
+      date: moment('2017-01-01')
+        .add(d, 'days')
+        .toDate(),
+      value: generateRandom(0, 100, 5)
+    })),
     color: '#2DA5DC'
   },
   Test_2: {
-    data: [
-      { date: new Date('2017-01-01'), value: 90 },
-      { date: new Date('2017-02-01'), value: 50 },
-      { date: new Date('2017-03-01'), value: 30 },
-      { date: new Date('2017-04-01'), value: 80 },
-      { date: new Date('2017-05-01'), value: 10 }
-    ],
+    data: range(100).map(d => ({
+      date: moment('2017-01-01')
+        .add(d, 'days')
+        .toDate(),
+      value: generateRandom(0, 100, 10)
+    })),
     color: '#C61A0C'
+  },
+  Test_3: {
+    data: range(100).map(d => ({
+      date: moment('2017-01-01')
+        .add(d, 'days')
+        .toDate(),
+      value: generateRandom(0, 100, 15)
+    })),
+    color: '#0CC61A'
   }
 };
 
@@ -42,7 +58,7 @@ const yAccessor = d => d.value;
 ReactDOM.render(
   <LineGraph
     data={data}
-    width={1000}
+    width={1750}
     height={500}
     margin={margin}
     yDomain={[0, 100]}
