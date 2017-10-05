@@ -1,4 +1,6 @@
+import { LegendOrdinal } from '@vx/legend';
 import { scaleLinear, scaleTime } from '@vx/scale';
+import { scaleOrdinal } from '@vx/scale';
 import { extent } from 'd3-array';
 import React, { Component } from 'react';
 
@@ -45,8 +47,30 @@ export default class LineGraph extends Component {
       domain: yDomain || extent(allData, yAccessor)
     });
 
+    const legendScale = scaleOrdinal({
+      domain: Object.keys(data),
+      range: Object.values(data).map(d => d.color)
+    });
+
     return (
-      <div style={{ position: 'relative' }}>
+      <div
+        style={{
+          position: 'relative',
+          backgroundColor: '#F6F6F6',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          width: width,
+          padding: 10
+        }}
+      >
+        <LegendOrdinal
+          direction="row"
+          itemDirection="row"
+          shape="rect"
+          scale={legendScale}
+          itemMargin="0 5px"
+        />
         <svg width={width} height={height} fill="#F6F6F6">
           <GraphArea
             width={width}

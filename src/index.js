@@ -48,10 +48,10 @@ const data = {
 };
 
 const margin = {
-  left: 90,
+  left: 60,
   right: 50,
   top: 20,
-  bottom: 60
+  bottom: 40
 };
 
 const xAccessor = d => d.date;
