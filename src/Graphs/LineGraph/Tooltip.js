@@ -29,7 +29,7 @@ export default function MyTooltip({
     color
   }));
 
-  const y = yScale(mean(values.map(d => d.point.value)));
+  const y = yScale(mean(values.map(d => yAccessor(d.point))));
 
   return (
     <Tooltip
