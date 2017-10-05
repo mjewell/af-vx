@@ -15,9 +15,11 @@ const generateRandom = (low, high, range) => {
   return prev;
 };
 
+const numPoints = 100;
+
 const data = {
   Test_1: {
-    data: range(100).map(d => ({
+    data: range(numPoints).map(d => ({
       date: moment('2017-01-01')
         .add(d, 'days')
         .toDate(),
@@ -26,7 +28,7 @@ const data = {
     color: '#2DA5DC'
   },
   Test_2: {
-    data: range(100).map(d => ({
+    data: range(numPoints).map(d => ({
       date: moment('2017-01-01')
         .add(d, 'days')
         .toDate(),
@@ -35,7 +37,7 @@ const data = {
     color: '#C61A0C'
   },
   Test_3: {
-    data: range(100).map(d => ({
+    data: range(numPoints).map(d => ({
       date: moment('2017-01-01')
         .add(d, 'days')
         .toDate(),
@@ -58,7 +60,7 @@ const yAccessor = d => d.value;
 ReactDOM.render(
   <LineGraph
     data={data}
-    width={1500}
+    width={1000}
     height={500}
     margin={margin}
     yDomain={[0, 100]}
