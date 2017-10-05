@@ -6,6 +6,7 @@ import Dots from './Dots';
 import GraphArea from './GraphArea';
 import Lines from './Lines';
 import MouseTracker from './MouseTracker';
+import Tooltip from './Tooltip';
 
 export default class LineGraph extends Component {
   state = { x: null, y: null };
@@ -23,7 +24,11 @@ export default class LineGraph extends Component {
       xDomain,
       yDomain,
       xAccessor,
-      yAccessor
+      yAccessor,
+      xAxisLabel,
+      yAxisLabel,
+      xAxisFormat,
+      yAxisFormat
     } = this.props;
 
     const xMax = width - margin.left - margin.right;
@@ -47,11 +52,17 @@ export default class LineGraph extends Component {
       <div style={{ position: 'relative' }}>
         <svg width={width} height={height} fill="#F6F6F6">
           <GraphArea
-            {...this.props}
+            width={width}
+            height={height}
+            margin={margin}
             xMax={xMax}
             yMax={yMax}
             xScale={xScale}
             yScale={yScale}
+            xAxisLabel={xAxisLabel}
+            yAxisLabel={yAxisLabel}
+            xAxisFormat={xAxisFormat}
+            yAxisFormat={yAxisFormat}
           >
             <Lines
               data={data}
@@ -75,6 +86,17 @@ export default class LineGraph extends Component {
             />
           </GraphArea>
         </svg>
+        <Tooltip
+          data={data}
+          x={this.state.x}
+          margin={margin}
+          xOffset={10}
+          yOffset={-40}
+          xScale={xScale}
+          yScale={yScale}
+          xAccessor={xAccessor}
+          yAccessor={yAccessor}
+        />
       </div>
     );
   }

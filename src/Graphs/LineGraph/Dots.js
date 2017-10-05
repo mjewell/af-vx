@@ -19,7 +19,7 @@ export default function Dots({
 
   return (
     <Group>
-      {entries(data).map(([name, { data, color }]) => {
+      {entries(data).map(([name, { data }]) => {
         const closestPoint = calculateClosestPoint({
           data,
           value: xScale.invert(x),
