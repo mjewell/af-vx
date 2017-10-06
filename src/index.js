@@ -15,7 +15,7 @@ const generateRandom = (low, high, range) => {
   return prev;
 };
 
-const numPoints = 100;
+const numPoints = 1000;
 
 const data = [
   {

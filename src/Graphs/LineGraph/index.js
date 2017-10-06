@@ -9,16 +9,9 @@ import React, { Component } from 'react';
 
 import Dots from './Dots';
 import Lines from './Lines';
-import MouseTracker from './MouseTracker';
 import Tooltip from './Tooltip';
 
 export default class LineGraph extends Component {
-  state = { x: null, y: null };
-
-  setCoords = ({ x, y }) => {
-    this.setState({ x, y });
-  };
-
   render() {
     const {
       data,
@@ -75,8 +68,8 @@ export default class LineGraph extends Component {
         />
         <svg width={width} height={height}>
           <Group top={margin.top} left={margin.left}>
-            <GridRows scale={yScale} width={width} stroke="#e9e9e9" />
-            <GridColumns scale={xScale} height={width} stroke="#e9e9e9" />
+            <GridRows scale={yScale} width={graphWidth} stroke="#e9e9e9" />
+            <GridColumns scale={xScale} height={graphHeight} stroke="#e9e9e9" />
             <AxisLeft
               scale={yScale}
               label={yAxisLabel}
@@ -96,31 +89,25 @@ export default class LineGraph extends Component {
               yAccessor={yAccessor}
             />
             <Dots
-              x={this.state.x}
               data={data}
+              width={graphWidth}
+              height={graphHeight}
               xScale={xScale}
               yScale={yScale}
               xAccessor={xAccessor}
               yAccessor={yAccessor}
             />
-            <MouseTracker
+            <Tooltip
+              data={data}
               width={graphWidth}
               height={graphHeight}
-              onMouseMove={this.setCoords}
+              xScale={xScale}
+              yScale={yScale}
+              xAccessor={xAccessor}
+              yAccessor={yAccessor}
             />
           </Group>
         </svg>
-        <Tooltip
-          data={data}
-          x={this.state.x}
-          margin={margin}
-          xOffset={10}
-          yOffset={-40}
-          xScale={xScale}
-          yScale={yScale}
-          xAccessor={xAccessor}
-          yAccessor={yAccessor}
-        />
       </div>
     );
   }

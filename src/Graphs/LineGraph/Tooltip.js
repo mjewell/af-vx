@@ -1,64 +1,92 @@
-import { Tooltip } from '@vx/tooltip';
+import { Group } from '@vx/group';
 import { mean } from 'lodash';
 import moment from 'moment';
-import React from 'react';
+import React, { Component } from 'react';
 
 import calculateClosestPoint from './calculateClosestPoint';
+import MouseTracker from './MouseTracker';
 
-export default function MyTooltip({
-  data,
-  x,
-  margin,
-  xOffset,
-  yOffset,
-  xScale,
-  yScale,
-  xAccessor,
-  yAccessor
-}) {
-  if (!x) {
-    return null;
-  }
+const tooltipPadding = 10;
+const lineHeight = 20;
+const lineSpacing = 4;
 
-  const values = data.map(({ name, data, color }) => ({
-    point: calculateClosestPoint({
+export default class MyTooltip extends Component {
+  state = { x: null, y: null };
+
+  setCoords = ({ x, y }) => {
+    this.setState({ x, y });
+  };
+
+  render() {
+    const {
       data,
-      value: xScale.invert(x),
-      accessor: xAccessor
-    }),
-    color
-  }));
+      width,
+      height,
+      xScale,
+      yScale,
+      xAccessor,
+      yAccessor
+    } = this.props;
 
-  const y = yScale(mean(values.map(d => yAccessor(d.point))));
+    const { x } = this.state;
 
-  return (
-    <Tooltip
-      top={y + margin.top + yOffset}
-      left={x + margin.left + xOffset}
-      style={{
-        backgroundColor: '#222',
-        color: '#FFF'
-      }}
-    >
-      <div style={{ fontWeight: 700 }}>
-        {moment(xScale.invert(x)).format('MMM YYYY')}
-      </div>
-      <div>
-        {values.map(v => (
-          <div key={v.color} style={{ marginTop: 5 }}>
-            <span
-              style={{
-                width: 12,
-                height: 12,
-                backgroundColor: v.color,
-                display: 'inline-block',
-                marginRight: 4
-              }}
+    const values = data.map(({ name, data, color }) => ({
+      point: calculateClosestPoint({
+        data,
+        value: xScale.invert(x),
+        accessor: xAccessor
+      }),
+      color
+    }));
+
+    const y = yScale(mean(values.map(d => yAccessor(d.point))));
+
+    const boundingBox = this.tooltip ? this.tooltip.getBBox() : {};
+
+    return (
+      <Group>
+        <Group top={y + tooltipPadding - boundingBox.height / 2} left={x + 20}>
+          {x && (
+            <rect
+              x={boundingBox.x - tooltipPadding}
+              y={boundingBox.y - tooltipPadding}
+              width={boundingBox.width + tooltipPadding * 2}
+              height={boundingBox.height + tooltipPadding * 2}
+              fill="#222"
             />
-            {yAccessor(v.point)}
-          </div>
-        ))}
-      </div>
-    </Tooltip>
-  );
+          )}
+          <g ref={el => (this.tooltip = el)}>
+            {x && (
+              <text fill="#FFF" font-weight={700}>
+                {moment(xScale.invert(x)).format('MMM YYYY')}
+              </text>
+            )}
+            {x &&
+              values.map((v, i) => (
+                <Group top={(i + 1) * lineHeight}>
+                  <rect
+                    y={-lineHeight / 2 + lineSpacing / 2}
+                    width={lineHeight - lineSpacing}
+                    height={lineHeight - lineSpacing}
+                    fill={v.color}
+                  />
+                  <text
+                    x={lineHeight + 5}
+                    fill="#FFF"
+                    dominantBaseline="central"
+                  >
+                    {yAccessor(v.point)}
+                  </text>
+                </Group>
+              ))}
+          </g>
+        </Group>
+        <MouseTracker
+          width={width}
+          height={height}
+          onMouseMove={this.setCoords}
+        />
+      </Group>
+    );
+  }
 }
