@@ -7,9 +7,8 @@ import { scaleOrdinal } from '@vx/scale';
 import { extent } from 'd3-array';
 import React, { Component } from 'react';
 
-import Dots from './Dots';
 import Lines from './Lines';
-import Tooltip from './Tooltip';
+import MouseOverInfo from './MouseOverInfo';
 
 export default class LineGraph extends Component {
   render() {
@@ -88,16 +87,7 @@ export default class LineGraph extends Component {
               xAccessor={xAccessor}
               yAccessor={yAccessor}
             />
-            <Dots
-              data={data}
-              width={graphWidth}
-              height={graphHeight}
-              xScale={xScale}
-              yScale={yScale}
-              xAccessor={xAccessor}
-              yAccessor={yAccessor}
-            />
-            <Tooltip
+            <MouseOverInfo
               data={data}
               width={graphWidth}
               height={graphHeight}
