@@ -1,5 +1,5 @@
 import { Tooltip } from '@vx/tooltip';
-import { entries, mean } from 'lodash';
+import { mean } from 'lodash';
 import moment from 'moment';
 import React from 'react';
 
@@ -20,7 +20,7 @@ export default function MyTooltip({
     return null;
   }
 
-  const values = entries(data).map(([name, { data, color }]) => ({
+  const values = data.map(({ name, data, color }) => ({
     point: calculateClosestPoint({
       data,
       value: xScale.invert(x),

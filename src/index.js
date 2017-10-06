@@ -17,8 +17,9 @@ const generateRandom = (low, high, range) => {
 
 const numPoints = 100;
 
-const data = {
-  Test_1: {
+const data = [
+  {
+    name: 'Ryan',
     data: range(numPoints).map(d => ({
       date: moment('2017-01-01')
         .add(d, 'days')
@@ -27,7 +28,8 @@ const data = {
     })),
     color: '#2DA5DC'
   },
-  Test_2: {
+  {
+    name: 'Brent',
     data: range(numPoints).map(d => ({
       date: moment('2017-01-01')
         .add(d, 'days')
@@ -36,7 +38,8 @@ const data = {
     })),
     color: '#C61A0C'
   },
-  Test_3: {
+  {
+    name: 'MLevin',
     data: range(numPoints).map(d => ({
       date: moment('2017-01-01')
         .add(d, 'days')
@@ -45,7 +48,7 @@ const data = {
     })),
     color: '#0CC61A'
   }
-};
+];
 
 const margin = {
   left: 60,

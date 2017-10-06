@@ -1,3 +1,6 @@
+import { AxisBottom, AxisLeft } from '@vx/axis';
+import { GridColumns, GridRows } from '@vx/grid';
+import { Group } from '@vx/group';
 import { LegendOrdinal } from '@vx/legend';
 import { scaleLinear, scaleTime } from '@vx/scale';
 import { scaleOrdinal } from '@vx/scale';
@@ -5,7 +8,6 @@ import { extent } from 'd3-array';
 import React, { Component } from 'react';
 
 import Dots from './Dots';
-import GraphArea from './GraphArea';
 import Lines from './Lines';
 import MouseTracker from './MouseTracker';
 import Tooltip from './Tooltip';
@@ -33,23 +35,23 @@ export default class LineGraph extends Component {
       yAxisFormat
     } = this.props;
 
-    const xMax = width - margin.left - margin.right;
-    const yMax = height - margin.top - margin.bottom;
+    const graphWidth = width - margin.left - margin.right;
+    const graphHeight = height - margin.top - margin.bottom;
 
-    const allData = [].concat(...Object.values(data).map(d => d.data));
+    const allData = [].concat(...data.map(d => d.data));
 
     const xScale = scaleTime({
-      range: [0, xMax],
+      range: [0, graphWidth],
       domain: xDomain || extent(allData, xAccessor)
     });
     const yScale = scaleLinear({
-      range: [yMax, 0],
+      range: [graphHeight, 0],
       domain: yDomain || extent(allData, yAccessor)
     });
 
     const legendScale = scaleOrdinal({
-      domain: Object.keys(data),
-      range: Object.values(data).map(d => d.color)
+      domain: data.map(d => d.name),
+      range: data.map(d => d.color)
     });
 
     return (
@@ -71,20 +73,21 @@ export default class LineGraph extends Component {
           scale={legendScale}
           itemMargin="0 5px"
         />
-        <svg width={width} height={height} fill="#F6F6F6">
-          <GraphArea
-            width={width}
-            height={height}
-            margin={margin}
-            xMax={xMax}
-            yMax={yMax}
-            xScale={xScale}
-            yScale={yScale}
-            xAxisLabel={xAxisLabel}
-            yAxisLabel={yAxisLabel}
-            xAxisFormat={xAxisFormat}
-            yAxisFormat={yAxisFormat}
-          >
+        <svg width={width} height={height}>
+          <Group top={margin.top} left={margin.left}>
+            <GridRows scale={yScale} width={width} stroke="#e9e9e9" />
+            <GridColumns scale={xScale} height={width} stroke="#e9e9e9" />
+            <AxisLeft
+              scale={yScale}
+              label={yAxisLabel}
+              tickFormat={yAxisFormat}
+            />
+            <AxisBottom
+              top={graphHeight}
+              scale={xScale}
+              label={xAxisLabel}
+              tickFormat={xAxisFormat}
+            />
             <Lines
               data={data}
               xScale={xScale}
@@ -101,11 +104,11 @@ export default class LineGraph extends Component {
               yAccessor={yAccessor}
             />
             <MouseTracker
-              width={xMax}
-              height={yMax}
+              width={graphWidth}
+              height={graphHeight}
               onMouseMove={this.setCoords}
             />
-          </GraphArea>
+          </Group>
         </svg>
         <Tooltip
           data={data}

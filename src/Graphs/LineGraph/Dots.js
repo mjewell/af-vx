@@ -1,6 +1,5 @@
 import { GlyphDot } from '@vx/glyph';
 import { Group } from '@vx/group';
-import { entries } from 'lodash';
 import React from 'react';
 
 import calculateClosestPoint from './calculateClosestPoint';
@@ -19,7 +18,7 @@ export default function Dots({
 
   return (
     <Group>
-      {entries(data).map(([name, { data }]) => {
+      {data.map(({ name, data }) => {
         const closestPoint = calculateClosestPoint({
           data,
           value: xScale.invert(x),

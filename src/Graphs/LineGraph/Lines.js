@@ -2,13 +2,12 @@ import { curveLinear } from '@vx/curve';
 import { GlyphDot } from '@vx/glyph';
 import { Group } from '@vx/group';
 import { LinePath } from '@vx/shape';
-import { entries } from 'lodash';
 import React from 'react';
 
 export default function Lines({ data, xScale, yScale, xAccessor, yAccessor }) {
   return (
     <Group>
-      {entries(data).map(([name, { data, color }]) => (
+      {data.map(({ name, data, color }) => (
         <LinePath
           key={name}
           data={data}
